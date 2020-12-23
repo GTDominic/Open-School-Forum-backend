@@ -17,13 +17,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/models");
-try{
-    db.sequelize.sync({ force: true }).then(() => {
-        console.log("Drop and re-sync db.");
-    });
-} catch(Error){
-        console.log("Not able to connect to database.");
-};
+db.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+}).catch(() => {
+  console.log("Couldn't connect to the database.");
+});
 
 // simple route
 app.get("/", (req, res) => {
