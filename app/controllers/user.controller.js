@@ -13,21 +13,24 @@ exports.register = (req, res) => {
         }
     }).then(function(user){
         if(user){
+            //If user found send message back
             res.status(409).send({
                 message: 'Nutzername "' + user.Username + '" ist bereits in Verwendung.'
             });
         } else {
-            console.log("Username alright");
+            //If not check if Email is already existing
             User.findOne({
                 where: {
                     Email: req.body.Email
                 }
             }).then(function(user){
+                //If Email found send message back
                 if(user){
                     res.status(409).send({
                         message: 'Email "' + user.Email + '" ist bereits in Verwendung.'
                     });
                 } else {
+                    //If not create user (with hashed password)
                     const user = {
                         Username: req.body.Username,
                         FirstName: req.body.FirstName,
