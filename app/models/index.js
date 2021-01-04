@@ -21,6 +21,7 @@ db.sequelize = sequelize;
 // initializing user models
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.rank = require("./rank.model.js")(sequelize, Sequelize);
+db.user_ranks = require("./user_ranks.model")(sequelize, Sequelize);
 
 // link user and rank as Many-To-Many
 db.user.belongsToMany(db.rank, { through: 'user_ranks'});
