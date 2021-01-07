@@ -1,12 +1,14 @@
 const db = require("../models");
 const User = db.user;
 const bcrypt = require('bcrypt');
+const Rank = require("./rank.controller");
 
 exports.register = (req, res) => {
     //Content validation and Email validation in frontend
     //Email expected to be in correct form
 
     //Check if username is in use
+
     User.findOne({
         where: {
             Username: req.body.Username
@@ -44,6 +46,9 @@ exports.register = (req, res) => {
                             res.status(201).send({
                                 message: 'Benutzer erfolgreich angelegt'
                             });
+                            for(var i = 0; i < req.body.Ranks.length; i++){
+                                Rank.addRankToUser(data.id, req.body.Ranks[i]);
+                            }
                         }).catch(err => {
                             res.status(500);
                         });

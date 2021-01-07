@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const rankinit = require("./app/controllers/rank.controller");
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require("./app/models");
 db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
+  rankinit.initialize();
 }).catch(() => {
   console.log("Couldn't connect to the database.");
 });
