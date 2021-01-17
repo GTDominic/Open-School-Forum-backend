@@ -10,8 +10,8 @@ exports.initialize = () =>  {
         {Name: 'Schüler', Display_priority: 1, On_register: true},
         {Name: 'Mathematik', Display_priority: 2, On_register: true},
         {Name: 'Chemie', Display_priority: 2, On_register: true},
-        {Name: 'BGY18', Display_priority: 2, On_register: true},
-        {Name: 'BGY19', Display_priority: 2, On_register: true}
+        {Name: 'BGY18', Display_priority: 3, On_register: true},
+        {Name: 'BGY19', Display_priority: 3, On_register: true}
     ];
 
     for(var i = 0; i < initialranks.length; i++){
@@ -30,5 +30,17 @@ exports.addRankToUser = (UserID, RankName) => {
                 rankId: data.dataValues.id
             };
             UserRank.create(RankModel);
+        })
+}
+
+exports.getRanks = (req, res) => {
+    Rank.findAll({where: {On_register: true}})
+        .then(data => {
+            res.status(200).send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving ranks."
+            })
         })
 }
