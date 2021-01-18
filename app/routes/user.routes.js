@@ -6,5 +6,7 @@ module.exports = app => {
     //Register new user
     router.post("/register", users.register);
 
+    router.post("/signin", users.singin);
+
     app.use('/user', router);
 }

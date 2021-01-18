@@ -1,7 +1,11 @@
 const db = require("../models");
 const User = db.user;
+const Rank = db.rank;
 const bcrypt = require('bcrypt');
-const Rank = require("./rank.controller");
+const jwt = require('jsonwebtoken');
+const Rankc = require("./rank.controller");
+const authConfig = require("../config/auth.config");
+const { user_ranks } = require("../models");
 
 exports.register = (req, res) => {
     //Content validation and Email validation in frontend
@@ -47,7 +51,7 @@ exports.register = (req, res) => {
                                 message: 'Benutzer erfolgreich angelegt'
                             });
                             for(var i = 0; i < req.body.Ranks.length; i++){
-                                Rank.addRankToUser(data.id, req.body.Ranks[i]);
+                                Rankc.addRankToUser(data.id, req.body.Ranks[i]);
                             }
                         }).catch(err => {
                             res.status(500);
@@ -56,4 +60,57 @@ exports.register = (req, res) => {
             });
         }
     });
+}
+
+exports.singin = (req, res) => {
+    User.findOne({ where: { Username: req.body.UsernameEmail }, include: Rank})
+        .then(user => {
+            if (!user) {
+                User.findOne({ where: { Email: req.body.UsernameEmail }, include: Rank})
+                    .then(user => {
+                        if(!user){
+                            return res.status(401).send({ message: "Nutzername oder Passwort inkorrekt." });
+                        } else {
+                            onUserFound(user);
+                        }
+                    });
+            } else {
+                onUserFound(user);
+            }
+
+            
+            function onUserFound(userdata) {
+                var passwordIsValid = bcrypt.compareSync(
+                    req.body.Password,
+                    userdata.Password
+                );
+
+                if (!passwordIsValid) {
+                    return res.status(401).send({ message: "Nutzername oder Passwort inkorrekt." });    // Gleiche Res bei Passworterror wie bei Nutzernameerror
+                }
+
+                var token = jwt.sign({ id: userdata.id }, authConfig.secret, {
+                    expiresIn: 86400    // 24h
+
+                    // ToDo:
+                    // evtl. in Zukunft abhängig von Nutzerinput ob angemeldet bleiben oder nicht
+                    //
+                });
+
+                var authorities = [];
+                for (let i = 0; i< userdata.ranks.length; i++){
+                    authorities.push("ROLE_" + userdata.ranks[i].Name.toUpperCase());
+                }
+                res.status(200).send({
+                    id: userdata.id,
+                    Username: userdata.Username,
+                    Email: userdata.Email,
+                    roles: authorities,
+                    accessToken: token
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message });
+        });
 }
