@@ -89,8 +89,10 @@ exports.singin = (req, res) => {
                     return res.status(401).send({ message: "Nutzername oder Passwort inkorrekt." });    // Gleiche Res bei Passworterror wie bei Nutzernameerror
                 }
 
+                var jwtExpiresIn = 86400;
+
                 var token = jwt.sign({ id: userdata.id }, authConfig.secret, {
-                    expiresIn: 86400    // 24h
+                    expiresIn: jwtExpiresIn    // 24h
 
                     // ToDo:
                     // evtl. in Zukunft abhängig von Nutzerinput ob angemeldet bleiben oder nicht
@@ -102,11 +104,8 @@ exports.singin = (req, res) => {
                     authorities.push("ROLE_" + userdata.ranks[i].Name.toUpperCase());
                 }
                 res.status(200).send({
-                    id: userdata.id,
-                    Username: userdata.Username,
-                    Email: userdata.Email,
-                    roles: authorities,
-                    accessToken: token
+                    accessToken: token,
+                    expiresIn: jwtExpiresIn
                 });
             }
         })
