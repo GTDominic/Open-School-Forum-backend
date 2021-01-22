@@ -5,7 +5,7 @@ module.exports = app => {
 
     var router = require("express").Router();
 
-    //Register new user
+    //Get ranks
     router.get("", ranks.getRanks);
 
     app.use('/ranks', router);
