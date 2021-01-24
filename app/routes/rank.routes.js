@@ -1,5 +1,3 @@
-const { rank } = require("../models/index.js");
-
 module.exports = app => {
     const ranks = require("../controllers/rank.controller.js");
 
