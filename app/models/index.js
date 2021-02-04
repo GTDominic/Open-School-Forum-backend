@@ -22,9 +22,14 @@ db.sequelize = sequelize;
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.rank = require("./rank.model.js")(sequelize, Sequelize);
 db.user_ranks = require("./user_ranks.model")(sequelize, Sequelize);
+db.thread = require("./thread.model")(sequelize, Sequelize);
 
 // link user and rank as Many-To-Many
 db.user.belongsToMany(db.rank, { through: 'user_ranks'});
 db.rank.belongsToMany(db.user, { through: 'user_ranks'});
+
+// link user and thread
+db.user.hasMany(db.thread);
+db.thread.belongsTo(db.user);
 
 module.exports = db;
