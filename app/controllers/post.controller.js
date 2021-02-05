@@ -1,5 +1,7 @@
+const { thread } = require("../models");
 const db = require("../models");
 const Post = db.post;
+const Thread = db.thread;
 
 exports.createpost = (req, res) => {
     const newpost = {
@@ -15,4 +17,16 @@ exports.createpost = (req, res) => {
         }).catch(err => {
             res.status(500).send(err);
         })
+}
+
+exports.getThreadWithPosts = (req, res) => {
+    Thread.findOne(
+        { where: { threadId: req.params.tid }},
+        { include: Post }
+    ).then(data => {
+        console.log(data);
+    })
+    .catch(err => {
+        res.status(500).send(err);
+    })
 }
