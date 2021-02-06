@@ -1,4 +1,3 @@
-const { thread } = require("../models");
 const db = require("../models");
 const Post = db.post;
 const Thread = db.thread;
@@ -21,10 +20,10 @@ exports.createpost = (req, res) => {
 
 exports.getThreadWithPosts = (req, res) => {
     Thread.findOne(
-        { where: { threadId: req.params.tid }},
-        { include: Post }
+        { include: db.post,
+        where: { id: req.params.tid }}
     ).then(data => {
-        console.log(data);
+        res.status(200).send(data);
     })
     .catch(err => {
         res.status(500).send(err);

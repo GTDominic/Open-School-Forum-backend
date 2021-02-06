@@ -1,9 +1,9 @@
 module.exports = app => {
-    const thread = require("../controllers/thread.controller");
+    const post = require("../controllers/post.controller");
     
     var router = require("express").Router();
 
-    router.get("/:tid", thread.getThreadWithPosts);
+    router.get("/:tid", post.getThreadWithPosts);
 
-    app.use('/post', router);
+    app.use('/thread', router);
 }
