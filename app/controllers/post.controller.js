@@ -18,6 +18,11 @@ exports.createpost = (req, res) => {
         })
 }
 
+exports.createtpost = (req, res) => {
+    req.threadId = req.params.tid;
+    this.createpost(req, res);
+}
+
 exports.getThreadWithPosts = (req, res) => {
     Thread.findOne(
         { include: db.post,
