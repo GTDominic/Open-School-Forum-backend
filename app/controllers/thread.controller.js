@@ -1,5 +1,6 @@
 const db = require("../models");
 const Thread = db.thread;
+const post = require("./post.controller");
 
 exports.showthreads = (req, res) => {
     //Zeigt die Liste aller Threads
@@ -21,7 +22,8 @@ exports.createthreads = (req, res) => {
 
     Thread.create(newthread)
         .then(data => {
-            res.status(201).send(data);
+            req.threadId = data.dataValues.id;
+            post.createpost(req, res);
         }).catch(err => {
             res.status(500).send(err);
         })

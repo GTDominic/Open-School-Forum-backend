@@ -8,5 +8,7 @@ module.exports = app => {
 
     router.post("/signin", users.singin);
 
+    router.get("", users.getUserList);
+
     app.use('/user', router);
 }

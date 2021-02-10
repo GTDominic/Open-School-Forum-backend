@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Rankc = require("./rank.controller");
 const authConfig = require("../config/auth.config");
-const { user_ranks } = require("../models");
 
 exports.register = (req, res) => {
     //Content validation and Email validation in frontend
@@ -112,4 +111,30 @@ exports.singin = (req, res) => {
         .catch(err => {
             res.status(500).send({ message: err.message });
         });
+}
+
+exports.getUserList = (req, res) => {
+    User.findAll().then(data => {
+        let biggestId = 0;
+        for(let i = 0; i < data.length; i++){
+            if(biggestId < data[i].id){
+                biggestId = data[i].id
+            }
+        }
+        biggestId++;
+
+        let userlist = new Array(biggestId);
+
+        for(let i = 0; i < userlist.length; i++){
+            userlist[i] = {};
+        }
+    
+        //Refine Userdata
+        for(let i = 0; i < data.length; i++){
+            userlist[data[i].id].id = data[i].id;
+            userlist[data[i].id].Username = data[i].Username;
+        }
+
+        res.status(200).send(userlist);
+    })
 }
