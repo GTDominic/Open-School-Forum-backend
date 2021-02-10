@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Rankc = require("./rank.controller");
 const authConfig = require("../config/auth.config");
-const { user_ranks } = require("../models");
 
 exports.register = (req, res) => {
     //Content validation and Email validation in frontend
