@@ -138,3 +138,16 @@ exports.getUserList = (req, res) => {
         res.status(200).send(userlist);
     })
 }
+
+exports.getUser = (req, res) => {
+    User.findOne({where: { id: req.params.uid }})
+        .then(data => {
+            let udata = {};
+            udata.Username = data.Username;
+
+            res.status(200).send(udata);
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        })
+}
