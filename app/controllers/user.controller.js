@@ -112,3 +112,29 @@ exports.singin = (req, res) => {
             res.status(500).send({ message: err.message });
         });
 }
+
+exports.getUserList = (req, res) => {
+    User.findAll().then(data => {
+        let biggestId = 0;
+        for(let i = 0; i < data.length; i++){
+            if(biggestId < data[i].id){
+                biggestId = data[i].id
+            }
+        }
+        biggestId++;
+
+        let userlist = new Array(biggestId);
+
+        for(let i = 0; i < userlist.length; i++){
+            userlist[i] = {};
+        }
+    
+        //Refine Userdata
+        for(let i = 0; i < data.length; i++){
+            userlist[data[i].id].id = data[i].id;
+            userlist[data[i].id].Username = data[i].Username;
+        }
+
+        res.status(200).send(userlist);
+    })
+}
