@@ -34,3 +34,15 @@ exports.getThreadWithPosts = (req, res) => {
         res.status(500).send(err);
     })
 }
+
+exports.findPostsByUser = (req, res) => {
+    Post.findAll(
+        { include: db.thread,
+        where: { userId: req.params.uid }}
+    ).then(data => {
+        res.status(200).send(data);
+    })
+    .catch(err => {
+        res.status(500).send(err);
+    })
+}
