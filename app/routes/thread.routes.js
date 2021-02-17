@@ -13,5 +13,7 @@ module.exports = app => {
         thread.createthreads
     );
 
+    router.get("/user/:uid", thread.findThreadsByUser);
+
     app.use('/threads', router);
 }

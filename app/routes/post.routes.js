@@ -12,5 +12,7 @@ module.exports = app => {
         post.createtpost
     )
 
+    router.get("/user/:uid", post.findPostsByUser);
+
     app.use('/thread', router);
 }

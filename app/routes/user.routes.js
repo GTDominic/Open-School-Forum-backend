@@ -10,5 +10,7 @@ module.exports = app => {
 
     router.get("", users.getUserList);
 
+    router.get("/:uid", users.getUser);
+
     app.use('/user', router);
 }

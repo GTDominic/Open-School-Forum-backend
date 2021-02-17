@@ -28,3 +28,12 @@ exports.createthreads = (req, res) => {
             res.status(500).send(err);
         })
 }
+
+exports.findThreadsByUser = (req, res) => {
+    Thread.findAll({ where: { userId: req.params.uid }})
+        .then(data => {
+            res.status(200).send(data);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+}
